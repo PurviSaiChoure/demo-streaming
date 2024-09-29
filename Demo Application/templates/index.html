@@ -89,7 +89,6 @@
             text-align: center;
             font-size: 0.9rem;
         }
-        /* Custom scrollbar styles */
         .news-container::-webkit-scrollbar {
             width: 8px;
         }
@@ -149,7 +148,7 @@
             <!-- Charts Column -->
             <div class="col-md-6">
                 <div class="chart-container mb-4">
-                    <h4 class="text-center mb-3">Top Disaster Types</h4>
+                    <h4 class="text-center mb-3">Disaster Types</h4>
                     <canvas id="disasterTypesChart"></canvas>
                 </div>
                 <div class="chart-container">
@@ -171,8 +170,8 @@
 
     <!-- Chart.js initialization -->
     <script>
-        // Parse the disaster data from the server
-        const disasterData = {{ disaster_data | tojson | safe }};
+        // Parse the disaster type and location data from the server
+        const disasterTypeData = {{ disaster_type_data | tojson | safe }};
         const locationData = {{ location_data | tojson | safe }};
 
         // Create the Disaster Types chart
@@ -180,12 +179,12 @@
         new Chart(disasterTypesCtx, {
             type: 'bar',
             data: {
-                labels: Object.keys(disasterData),
+                labels: Object.keys(disasterTypeData),
                 datasets: [{
-                    label: 'Number of Reports',
-                    data: Object.values(disasterData),
-                    backgroundColor: 'rgba(58, 123, 89, 0.7)',
-                    borderColor: 'rgba(58, 123, 89, 1)',
+                    label: 'Number of Occurrences',
+                    data: Object.values(disasterTypeData),
+                    backgroundColor: 'rgba(255, 159, 64, 0.7)',
+                    borderColor: 'rgba(255, 159, 64, 1)',
                     borderWidth: 1
                 }]
             },
