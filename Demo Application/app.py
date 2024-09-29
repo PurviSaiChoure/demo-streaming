@@ -9,9 +9,46 @@ def get_db_connection():
     conn.row_factory = sqlite3.Row
     return conn
 
+# Get news data from the database
+def get_news_data(topic=None, location=None, organization=None):
+    conn = get_db_connection()
+    cursor = conn.cursor()
+
+    # Basic query to retrieve data from disasters table
+    query = "SELECT headline, description FROM disasters WHERE 1=1"
+
+    # Add conditions based on the search filters
+    params = []
+    if topic:
+        query += " AND headline LIKE ?"
+        params.append(f'%{topic}%')
+    if location:
+        query += " AND description LIKE ?"
+        params.append(f'%{location}%')
+    if organization:
+        query += " AND description LIKE ?"
+        params.append(f'%{organization}%')
+
+    # Execute the query with search filters
+    cursor.execute(query, params)
+    
+    # Fetch top 8 results
+    news_items = cursor.fetchall()[:8]
+    conn.close()
+
+    return [dict(item) for item in news_items]
+
 @app.route('/')
 def index():
-    return render_template('index.html')
+    # Get search query parameters
+    topic = request.args.get('topic')
+    location = request.args.get('location')
+    organization = request.args.get('organization')
+
+    # Fetch news data based on search
+    news_data = get_news_data(topic, location, organization)
+
+    return render_template('index.html', news=news_data, enumerate=enumerate)
 
 @app.route('/search', methods=['GET'])
 def search():

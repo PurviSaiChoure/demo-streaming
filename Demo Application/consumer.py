@@ -22,6 +22,7 @@ def setup_database():
             website TEXT,
             url TEXT,
             headline TEXT,
+            description TEXT,
             persons TEXT,
             organizations TEXT,
             locations TEXT,
@@ -38,6 +39,7 @@ def setup_database():
     ''')
     conn.commit()
     return conn, cursor
+
 def insert_dataframe_to_database(conn, df):
     df.to_sql(table_name, conn, if_exists='replace', index=False)
 
@@ -56,7 +58,6 @@ def process_message(message):
         print(f"Error decoding JSON: {e}")
     except Exception as e:
         print(f"Error processing message: {e}")
-
 
 consumer = KafkaConsumer(
     bootstrap_servers=[kafka_nodes],
@@ -81,7 +82,6 @@ try:
                 process_message(message)
                 message_count += 1
         
-
         if time.time() - start_time > 30 and len(message_packet) == 0:
             print("No new messages for 30 seconds. Stopping consumption.")
             break
