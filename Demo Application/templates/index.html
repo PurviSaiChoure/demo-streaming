@@ -48,8 +48,13 @@
             background-color: var(--primary-color);
             border: none;
         }
+        .news-container {
+            height: 600px;
+            overflow-y: auto;
+            padding-right: 10px;
+        }
         .news-item {
-            background-color: var(--secondary-color);
+            background-color: white;
             border-radius: 10px;
             padding: 1rem;
             margin-bottom: 1rem;
@@ -84,6 +89,20 @@
             text-align: center;
             font-size: 0.9rem;
         }
+        /* Custom scrollbar styles */
+        .news-container::-webkit-scrollbar {
+            width: 8px;
+        }
+        .news-container::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+        .news-container::-webkit-scrollbar-thumb {
+            background: var(--primary-color);
+            border-radius: 4px;
+        }
+        .news-container::-webkit-scrollbar-thumb:hover {
+            background: #2a5a41;
+        }
     </style>
 </head>
 <body>
@@ -104,34 +123,35 @@
             </form>
         </div>
 
-        <!-- News Items -->
-        <div class="news-container mb-4">
-            {% if news %}
-                {% for article in news %}
-                    <div class="news-item">
-                        <h5 class="news-title">{{ article['headline'] }}</h5>
-                        <p>{{ article['description'] }}</p>
-                        <p><small class="text-muted">Locations: {{ article['locations'] }}</small></p>
-                        <p><small class="text-muted">Events: {{ article['events'] }}</small></p>
-                        <p><small class="text-muted">Persons: {{ article['persons'] }}</small></p>
-                        <p><small class="text-muted">Organizations: {{ article['organizations'] }}</small></p>
-                        <a href="{{ article['url'] }}" class="btn btn-primary btn-sm" target="_blank">Read More</a>
-                    </div>
-                {% endfor %}
-            {% else %}
-                <div class="alert alert-info">No results found for your search.</div>
-            {% endif %}
-        </div>
-
-        <!-- Chart Section -->
         <div class="row">
-            <div class="col-md-6 mb-4">
-                <div class="chart-container">
+            <!-- News Items Column -->
+            <div class="col-md-6">
+                <h4 class="mb-3">Latest News</h4>
+                <div class="news-container">
+                    {% if news %}
+                        {% for article in news %}
+                            <div class="news-item">
+                                <h5 class="news-title">{{ article['headline'] }}</h5>
+                                <p>{{ article['description'] }}</p>
+                                <p><small class="text-muted">Locations: {{ article['locations'] }}</small></p>
+                                <p><small class="text-muted">Events: {{ article['events'] }}</small></p>
+                                <p><small class="text-muted">Persons: {{ article['persons'] }}</small></p>
+                                <p><small class="text-muted">Organizations: {{ article['organizations'] }}</small></p>
+                                <a href="{{ article['url'] }}" class="btn btn-primary btn-sm" target="_blank">Read More</a>
+                            </div>
+                        {% endfor %}
+                    {% else %}
+                        <div class="alert alert-info">No results found for your search.</div>
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- Charts Column -->
+            <div class="col-md-6">
+                <div class="chart-container mb-4">
                     <h4 class="text-center mb-3">Top Disaster Types</h4>
                     <canvas id="disasterTypesChart"></canvas>
                 </div>
-            </div>
-            <div class="col-md-6 mb-4">
                 <div class="chart-container">
                     <h4 class="text-center mb-3">Top Affected Locations</h4>
                     <canvas id="locationsChart"></canvas>
@@ -140,7 +160,7 @@
         </div>
     </div>
 
-    <footer>
+    <footer class="mt-5">
         <div class="container">
             <p>&copy; 2024 GeoAlert. All Rights Reserved.</p>
         </div>
@@ -209,8 +229,7 @@
                         position: 'right',
                     },
                     title: {
-                        display: true,
-                        text: 'Affected Locations'
+                        display: false
                     }
                 }
             }
