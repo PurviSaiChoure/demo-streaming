@@ -7,13 +7,11 @@ from bs4 import BeautifulSoup
 import spacy
 import os
 
-kafka_nodes = os.environ.get('KAFKA_SERVER', 'kafka:29092')  # Use environment variable with fallback
+kafka_nodes = os.environ.get('KAFKA_SERVER', 'kafka:29092') 
 myTopic = "india_disasters"
 
-# Load the spaCy model for entity extraction
 nlp = spacy.load('en_core_web_sm')
 
-# Define the URLs and parsing formats
 urls = [
     "https://timesofindia.indiatimes.com/topic/indian-disasters",
     "https://www.ndtv.com/search?searchtext=natural-disasters-in-india",
@@ -22,12 +20,10 @@ urls = [
 formats = ['html.parser', 'html.parser', 'html.parser']
 website = ["Times of India", "NDTV", "The Hindu"]
 
-# Custom headers for Times of India request
 headers = {
     "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/90.0.4430.212 Safari/537.36"
 }
 
-# Set to store processed article URLs
 processed_urls = set()
 
 def categorize_entities(entities):
@@ -48,7 +44,7 @@ def gen_data():
     try:
         producer = KafkaProducer(bootstrap_servers=[kafka_nodes], 
                                  value_serializer=lambda x: dumps(x).encode('utf-8'),
-                                 api_version=(0, 10, 1))  # Specify API version
+                                 api_version=(0, 10, 1))  
         
         for idx, url in enumerate(urls):
             print(f"Crawling web page: {url}")
@@ -179,8 +175,8 @@ def gen_data():
         print(f"An error occurred: {str(e)}")
 
 if __name__ == "__main__":
-    gen_data()  # Run once immediately
-    schedule.every(5).minutes.do(gen_data)  # Then run every 5 minutes
+    gen_data()  
+    schedule.every(5).minutes.do(gen_data)  
     
     while True:
         schedule.run_pending()
