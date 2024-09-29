@@ -6,8 +6,8 @@ import time
 import psycopg2
 from psycopg2.extras import execute_values
 
-kafka_nodes = "kafka:9092"
-topic_name = "india_disasters"
+kafka_nodes = os.environ.get('KAFKA_SERVER', 'kafka:29092') 
+myTopic = "india_disasters"
 db_params = {
     'dbname': 'your_database_name',
     'user': 'your_username',
