@@ -30,8 +30,6 @@ def get_news_data(keyword=None):
     return [dict(item) for item in news_items]
 
 def get_disaster_type(headline, description):
-    # This is a simple example. You may want to use more sophisticated NLP techniques
-    # or a pre-defined list of disaster types for better categorization.
     keywords = {
         'flood': 'Flood',
         'earthquake': 'Earthquake',
@@ -60,8 +58,8 @@ def get_chart_data(news_data):
             locations.update(item['locations'].split(', '))
 
     return {
-        'disaster_type_data': dict(disaster_types.most_common(5)),  # Return top 5 disaster types
-        'location_data': dict(locations.most_common(5))  # Return top 5 locations
+        'disaster_type_data': dict(disaster_types.most_common(5)),  
+        'location_data': dict(locations.most_common(5)) 
     }
 
 @app.route('/')
