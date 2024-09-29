@@ -170,11 +170,8 @@
 
     <!-- Chart.js initialization -->
     <script>
-        // Parse the disaster type and location data from the server
         const disasterTypeData = {{ disaster_type_data | tojson | safe }};
         const locationData = {{ location_data | tojson | safe }};
-
-        // Create the Disaster Types chart
         const disasterTypesCtx = document.getElementById('disasterTypesChart').getContext('2d');
         new Chart(disasterTypesCtx, {
             type: 'bar',
@@ -201,8 +198,6 @@
                 }
             }
         });
-
-        // Create the Locations chart
         const locationsCtx = document.getElementById('locationsChart').getContext('2d');
         new Chart(locationsCtx, {
             type: 'pie',
